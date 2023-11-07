@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Google Maps Widget</title>
+    <!-- Include the Google Maps JavaScript API -->
+    <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places"></script>
+</head>
+<body>
+    <h1>Google Maps Widget</h1>
+
+    <!-- Create a search input box -->
+    <input type="text" id="addressInput" placeholder="Enter an address">
+    <button onclick="searchAddress()">Search</button>
+
+    <!-- Create a div to display the map -->
+    <div id="map" style="height: 400px;"></div>
+
+    <!-- Create a button to print coordinates -->
+    <button onclick="printCoordinates()">Print Coordinates</button>
+
+    <script>
+        var map;
+        var geocoder;
+        var marker;
+
+        // Initialize the map
+        function initMap() {
+            map = new google.maps.Map(document.getElementById('map'), {
+                center: { lat: 0, lng: 0 },
+                zoom: 8
+            });
+            geocoder = new google.maps.Geocoder();
+            marker = new google.maps.Marker({ map: map });
+        }
+
+        // Function to search for an address and display it on the map
+        function searchAddress() {
+            var address = document.getElementById('addressInput').value;
+            geocoder.geocode({ 'address': address }, function (results, status) {
+                if (status === 'OK') {
+                    map.setCenter(results[0].geometry.location);
+                    marker.setPosition(results[0].geometry.location);
+                } else {
+                    alert('Geocode was not successful for the following reason: ' + status);
+                }
+            });
+        }
+
+        // Function to print coordinates to the console
+        function printCoordinates() {
+            var lat = marker.getPosition().lat();
+            var lng = marker.getPosition().lng();
+            var coordinates = lat + ', ' + lng;
+            
+            console.log('Coordinates:', coordinates);
+        }
+
+    </script>
+
+    <!-- Initialize the map when the page loads -->
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCiyEltaSsMNIQHqZV2ye2lJXswlXe-D20&libraries=places&callback=initMap"></script>
+</body>
+</html>
